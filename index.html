@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Image Clean Studio 網頁版</title>
+<link rel="stylesheet" href="styles.css">
+<script defer src="formats.js"></script>
+<script defer src="processing.js"></script>
+<script defer src="app.js"></script>
+</head>
+<body>
+<header class="top"><div class="identity"><span class="mark" aria-hidden="true">▧</span><div><h1>Image Clean Studio</h1><p>網頁版</p></div></div><button id="theme" type="button">淺色主題</button></header>
+<main>
+<nav aria-label="工作頁" class="tabs">
+  <button type="button" data-tab="batch" aria-current="page">批次處理</button>
+  <button type="button" data-tab="inspect">元數據檢視器</button>
+  <button type="button" data-tab="history">處理紀錄</button>
+</nav>
+<section id="batch" class="pane">
+<div class="workspace">
+<section class="queue surface" aria-labelledby="queue-title">
+ <div class="section-head"><h2 id="queue-title">圖片清單</h2><span id="count">0 張圖片</span></div>
+ <button type="button" class="drop" id="drop">拖曳圖片到這裡<span>PNG、JPG、WebP</span></button>
+ <input id="files" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" multiple hidden>
+ <input id="folder" type="file" webkitdirectory multiple hidden>
+ <div class="actions">
+  <button type="button" id="add">加入圖片</button><button type="button" id="addFolder">加入資料夾</button>
+  <button type="button" id="all">全選</button><button type="button" id="remove">移除選取</button>
+ </div>
+ <fieldset id="bulk" hidden>
+  <legend>批次套用至選取圖片</legend>
+  <div class="actions"><input id="group" aria-label="群組名稱" placeholder="群組名稱"><input id="scene" aria-label="情境名稱" placeholder="情境名稱"><button id="apply" type="button">套用</button></div>
+  <div class="actions"><button id="pasteGroup" type="button">貼上群組</button><button id="pasteScene" type="button">貼上情境</button></div>
+ </fieldset>
+ <div class="table-wrap"><table><thead><tr><th scope="col">選取</th><th scope="col">圖片</th><th scope="col">群組</th><th scope="col">情境</th><th scope="col">輸出名稱</th><th scope="col">狀態</th></tr></thead><tbody id="rows"></tbody></table></div>
+ <p class="empty" id="empty">加入圖片後即可預覽輸出檔名。</p>
+</section>
+<aside class="surface settings" aria-labelledby="settings-title">
+ <h2 id="settings-title">輸出設定</h2>
+ <div class="settings-scroll">
+  <label>處理模式<select id="mode"><option value="clean">清除元數據，維持格式</option><option value="convert">轉檔並清除元數據</option><option value="copy">原樣複製，保留元數據</option></select></label>
+  <label id="formatRow" hidden>輸出格式<select id="format"><option value="png">PNG</option><option value="jpeg">JPG</option><option value="webp">WebP</option></select></label>
+  <label id="qualityRow" hidden>有損品質 <output id="qualityValue">95</output><input id="quality" type="range" min="1" max="100" value="95"></label>
+  <label id="alphaRow">透明度<select id="alpha"><option value="auto">自動安全模式</option><option value="keep">保留透明背景</option><option value="flatten">合成背景</option></select></label>
+  <label id="backgroundRow">合成背景色<input id="background" type="color" value="#ffffff"></label>
+  <label id="resizeRow">最長邊（留空保留尺寸）<input id="maxEdge" type="number" min="1" max="16384" placeholder="原始尺寸"></label>
+  <p id="modeNote" class="muted"></p>
+ </div>
+ <fieldset><legend>命名</legend><label class="check"><input type="checkbox" id="naming">使用群組與情境命名</label>
+ <label class="check"><input type="checkbox" id="numbered" checked>同名自動加 _01、_02</label>
+ <p class="muted">相簿平台對附編號名稱的分類方式尚未確認。</p></fieldset>
+</aside>
+</div>
+<footer class="surface controls"><div><p id="status" aria-live="polite">圖片在瀏覽器內處理。</p><progress id="progress" value="0" max="1" aria-label="處理進度"></progress></div>
+<div class="actions"><button type="button" id="cancel" disabled>取消</button><button type="button" id="start" class="primary" disabled>開始處理</button></div></footer>
+</section>
+<section id="inspect" class="surface pane" hidden><div class="section-head"><h2>元數據檢視器</h2><label class="file-label">開啟圖片<input id="inspectFile" type="file" accept=".png,.jpg,.jpeg,.webp"></label></div>
+<p class="muted">顯示容器標記、PNG 文字欄位及已知 Stealth 資料。</p>
+<pre id="inspection" tabindex="0">尚未選取圖片。</pre></section>
+<section id="history" class="surface pane" hidden><div class="section-head"><h2>處理紀錄</h2><button id="download" type="button" disabled>下載本批 ZIP</button></div>
+<p id="summary" class="muted">尚無處理紀錄。</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">輸出檔名</th><th scope="col">尺寸</th><th scope="col">元數據驗證</th><th scope="col">畫質驗證</th><th scope="col">下載</th></tr></thead><tbody id="results"></tbody></table></div></section>
+<footer class="credits">Jo White 製作 · 可複製、修改供個人使用，請勿用於營利。轉發請標註原作者 Jo White。</footer>
+</main>
+</body>
+</html>
